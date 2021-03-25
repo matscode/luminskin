@@ -1,1 +1,1 @@
-web: npx http-server index
+web: npx http-server dist
