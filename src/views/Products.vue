@@ -2,8 +2,8 @@
   <div class="">
     <section class="container">
       <header class="products-banner">
-        <section class="d-flex align-items-end">
-          <section class="left-content">
+        <section class="row align-items-end">
+          <section class="left-content col-md-8">
             <h1 class="mb-4">
               All Products
             </h1>
@@ -12,7 +12,7 @@
             </p>
           </section>
 
-          <section class="right-content ml-auto">
+          <section class="right-content col-md-4 text-md-right">
             <Dropdown :options="[
             {value: 'all-products', text: 'All Products'},
             {value: 'new-products', text: 'New Products'},
@@ -20,7 +20,7 @@
             {value: 'skin-care', text: 'Skin Care'},
             {value: 'hair-body-care', text: 'Hair & Body Care'},
             ]"
-            placeholder="Filter by"></Dropdown>
+            placeholder="Filter by" root-class="w-100 mt-4"></Dropdown>
           </section>
         </section>
       </header>

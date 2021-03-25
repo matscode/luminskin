@@ -3,8 +3,8 @@
     <div class="cart-overlay" @click="closeCart"></div>
 
     <div class="cart-card d-flex flex-column">
-      <header class="m-4 text-center">
-        <div class="clearfix mb-4">
+      <header class="m-4">
+        <div class="clearfix mb-4 text-center">
           <a href="" class="close-button" @click.prevent="closeCart">
             <span class="material-icons">
               chevron_right
@@ -178,7 +178,7 @@ export default {
   left: 0;
   width: 100%;
 
-  z-index: 99;
+  z-index: 1040;
 }
 
 .white-bg-dropdown {
@@ -191,13 +191,19 @@ export default {
   background-color: var(--white);
 
   text-align: left; // reset alignment
-  z-index: 999;
+  z-index: 1050;
 
   background-color: var(--card-background-color);
 
   & > main {
     overflow: auto;
     height: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .cart-card {
+    width: 100%;
   }
 }
 
@@ -215,6 +221,10 @@ export default {
 
   border-radius: 50%;
   float: left;
+
+  &:hover {
+    text-decoration: none;
+  }
 }
 
 .cart-title {

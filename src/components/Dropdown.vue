@@ -49,6 +49,7 @@ export default {
 <style scoped lang="scss">
 #customDropdown {
   position: relative;
+  display: inline-block;
 
   select {
     width: 100%;

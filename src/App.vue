@@ -1,12 +1,6 @@
 <template>
   <div id="app">
-    <div class="text-center trial-notice">
-      <a href="#" class="get-free-trial-link">
-        Get Your Free Trial Today
-      </a>
-    </div>
-
-    <Navigation></Navigation>
+    <Navigation :show-trial-bar="showTrialBar"></Navigation>
 
     <Cart v-if="$store.getters.showCart"></Cart>
 
@@ -18,10 +12,16 @@
 import Navigation from '@/components/Navigation.vue';
 import Cart from '@/components/Cart.vue';
 import { mapState } from 'vuex';
+import { debounce } from 'lodash';
 
 export default {
   name: 'LuminApp',
   components: { Navigation, Cart },
+  data() {
+    return {
+      showTrialBar: true,
+    };
+  },
   watch: {
     showCart(newValue) {
       const documentBody = document.querySelector('body');
@@ -38,6 +38,17 @@ export default {
   computed: mapState([
     'showCart',
   ]),
+  mounted() {
+    // hide the trial bar on scroll of 30px
+    window.addEventListener('scroll', debounce(() => {
+      const { scrollY } = window;
+      if (scrollY > 30) {
+        this.showTrialBar = false;
+      } else {
+        this.showTrialBar = true;
+      }
+    }, 200));
+  },
 };
 </script>
 
@@ -59,6 +70,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   /* color: #2c3e50; */
   color: var(--body-color);
+  margin-top: 85px
 }
 
 h1, h2, h3, h4 {
@@ -67,6 +79,14 @@ h1, h2, h3, h4 {
 
 .material-icons {
   color: #000;
+}
+
+a {
+  color: var(--body-color); // a reset
+
+  &:hover {
+    color: var(--primary)
+  }
 }
 
 .trial-notice {
