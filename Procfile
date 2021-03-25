@@ -1,1 +1,1 @@
-web: npx http-server build
+web: npx http-server index
