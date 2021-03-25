@@ -1,10 +1,16 @@
 <template>
   <section class="fixed-top">
-    <div class="text-center trial-notice" v-if="showTrialBar">
-      <a href="#" class="get-free-trial-link">
-        Get Your Free Trial Today
-      </a>
-    </div>
+    <transition
+    name="trial-notice"
+    enter-active-class="animate__animated animate__slideInDown"
+    leave-active-class="animate__animated animate__slideOutUp"
+    >
+      <div class="text-center trial-notice" v-if="showTrialBar">
+        <a href="#" class="get-free-trial-link">
+          Get Your Free Trial Today
+        </a>
+      </div>
+    </transition>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
       <div class="container-fluid">

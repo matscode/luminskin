@@ -2,7 +2,7 @@
   <div id="app">
     <Navigation :show-trial-bar="showTrialBar"></Navigation>
 
-    <Cart v-if="$store.getters.showCart"></Cart>
+    <Cart :show-cart="$store.getters.showCart"></Cart>
 
     <router-view />
   </div>
@@ -62,6 +62,7 @@ export default {
   --button-color: #4B5548;
   --body-color: #0B0C0D;
   --card-background-color: #f2f2ef;
+  --animate-duration: 0.3s;
 }
 
 #app {

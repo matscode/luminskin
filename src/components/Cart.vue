@@ -1,127 +1,139 @@
 <template>
   <div>
-    <div class="cart-overlay" @click="closeCart"></div>
+    <transition
+    name="cart-card"
+    enter-active-class="animate__animated animate__fadeIn"
+    leave-active-class="animate__animated animate__fadeOut"
+    >
+      <div class="cart-overlay" @click="closeCart" v-if="showCart"></div>
+    </transition>
 
-    <div class="cart-card d-flex flex-column">
-      <header class="m-4">
-        <div class="clearfix mb-4 text-center">
-          <a href="" class="close-button" @click.prevent="closeCart">
-            <span class="material-icons">
-              chevron_right
-            </span>
-          </a>
+    <transition
+    name="cart-card"
+    enter-active-class="animate__animated animate__slideInRight"
+    leave-active-class="animate__animated animate__slideOutRight"
+    >
+      <div class="cart-card d-flex flex-column" v-if="showCart">
+        <header class="m-4">
+          <div class="clearfix mb-4 text-center">
+            <a href="" class="close-button" @click.prevent="closeCart">
+              <span class="material-icons">
+                chevron_right
+              </span>
+            </a>
 
-          <span class="cart-title">
-            Your Cart
-          </span>
-        </div>
-
-        <Dropdown
-        root-class="white-bg-dropdown"
-        :options="currencies.map((c) => ({value: c, text: c}))"
-        :selected="$store.state.currency" width="100px"
-        @change.native="handleCurrencyChange($event)"></Dropdown>
-      </header>
-
-      <main class="px-4 flex-grow-1">
-        <section class="cart-items">
-          <section
-          class="cart-item bg-white mb-2 p-3"
-          v-for="cartItem in $store.state.cartItems"
-          :key="cartItem.product.id"
-          >
-            <div class="d-flex justify-content-between h-100">
-              <div class="left-half d-flex flex-column justify-content-between flex-grow-1">
-                <h6 class="cart-item-title">
-                  {{ cartItem.product.title }}
-                </h6>
-
-                <div class="d-flex align-items-center">
-                  <div
-                  class="cart-item-quantity-control p-2 d-flex justify-content-around"
-                  >
-                    <a
-                    href=""
-                    class="cart-item-quantity-btn cart-item-quantity-btn-minus"
-                    @click.prevent="reduceItemInCart(cartItem.product.id)"
-                    >-</a>
-                    <span>
-                      {{ cartItem.quantity }}
-                    </span>
-                    <a
-                    href=""
-                    class="cart-item-quantity-btn cart-item-quantity-btn-plus"
-                    @click.prevent="addProductToCart(cartItem.product)"
-                    >
-                    +
-                    </a>
-                  </div>
-
-                  <div class="cart-item-cost ml-auto">
-                    {{
-                      $helpers.formatMoney(
-                        cartItem.product.price * cartItem.quantity,
-                        $store.state.currency,
-                      )
-                    }}
-                  </div>
-                </div>
-              </div>
-
-              <div class="right-half position-relative">
-                <img :src="cartItem.product.image_url" alt="Image" width="50">
-
-                <a
-                class="cart-item-remove-button"
-                href="#"
-                @click.prevent="removeItemFromCart(cartItem.product.id)"
-                >
-                &times;
-                </a>
-              </div>
-            </div>
-          </section>
-
-          <section
-          class="text-center mt-5"
-          v-if="!$store.state.cartItems.length"
-          >
-            There are no items in your cart.
-          </section>
-        </section>
-      </main>
-
-      <footer class="cart-footer" v-if="$store.state.cartItems.length">
-        <section class="m-4">
-          <div class="d-flex align-items-center">
-            <span class="small">
-              Subtotal
-            </span>
-
-            <span class="cart-items-total-price ml-auto">
-              {{
-                $helpers.formatMoney(
-                  $store.state.cartItems.reduce(
-                    (sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity),
-                    0
-                    ),
-                    $store.state.currency
-                  )
-              }}
+            <span class="cart-title">
+              Your Cart
             </span>
           </div>
 
-          <button class="btn cart-cta-btns subscription-btn">
-            Make this a subscription (Save 20%)
-          </button>
+          <Dropdown
+          root-class="white-bg-dropdown"
+          :options="currencies.map((c) => ({value: c, text: c}))"
+          :selected="$store.state.currency" width="100px"
+          @change.native="handleCurrencyChange($event)"></Dropdown>
+        </header>
 
-          <button class="btn cart-cta-btns checkout-page-btn">
-            Proceed to checkout
-          </button>
+        <main class="px-4 flex-grow-1">
+          <section class="cart-items">
+            <section
+            class="cart-item bg-white mb-2 p-3"
+            v-for="cartItem in $store.state.cartItems"
+            :key="cartItem.product.id"
+            >
+              <div class="d-flex justify-content-between h-100">
+                <div class="left-half d-flex flex-column justify-content-between flex-grow-1">
+                  <h6 class="cart-item-title">
+                    {{ cartItem.product.title }}
+                  </h6>
 
-        </section>
-      </footer>
-    </div>
+                  <div class="d-flex align-items-center">
+                    <div
+                    class="cart-item-quantity-control p-2 d-flex justify-content-around"
+                    >
+                      <a
+                      href=""
+                      class="cart-item-quantity-btn cart-item-quantity-btn-minus"
+                      @click.prevent="reduceItemInCart(cartItem.product.id)"
+                      >-</a>
+                      <span>
+                        {{ cartItem.quantity }}
+                      </span>
+                      <a
+                      href=""
+                      class="cart-item-quantity-btn cart-item-quantity-btn-plus"
+                      @click.prevent="addProductToCart(cartItem.product)"
+                      >
+                      +
+                      </a>
+                    </div>
+
+                    <div class="cart-item-cost ml-auto">
+                      {{
+                        $helpers.formatMoney(
+                          cartItem.product.price * cartItem.quantity,
+                          $store.state.currency,
+                        )
+                      }}
+                    </div>
+                  </div>
+                </div>
+
+                <div class="right-half position-relative">
+                  <img :src="cartItem.product.image_url" alt="Image" width="50">
+
+                  <a
+                  class="cart-item-remove-button"
+                  href="#"
+                  @click.prevent="removeItemFromCart(cartItem.product.id)"
+                  >
+                  &times;
+                  </a>
+                </div>
+              </div>
+            </section>
+
+            <section
+            class="text-center mt-5"
+            v-if="!$store.state.cartItems.length"
+            >
+              There are no items in your cart.
+            </section>
+          </section>
+        </main>
+
+        <footer class="cart-footer" v-if="$store.state.cartItems.length">
+          <section class="m-4">
+            <div class="d-flex align-items-center">
+              <span class="small">
+                Subtotal
+              </span>
+
+              <span class="cart-items-total-price ml-auto">
+                {{
+                  $helpers.formatMoney(
+                    $store.state.cartItems.reduce(
+                      (sum, cartItem) => sum + (cartItem.product.price * cartItem.quantity),
+                      0
+                      ),
+                      $store.state.currency
+                    )
+                }}
+              </span>
+            </div>
+
+            <button class="btn cart-cta-btns subscription-btn">
+              Make this a subscription (Save 20%)
+            </button>
+
+            <button class="btn cart-cta-btns checkout-page-btn">
+              Proceed to checkout
+            </button>
+
+          </section>
+        </footer>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -135,6 +147,12 @@ export default {
   mixins: [CartMixin],
   components: {
     Dropdown,
+  },
+  props: {
+    showCart: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
