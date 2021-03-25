@@ -1,5 +1,11 @@
 module.exports = {
   css: {
-    sourceMap: true
-  }
-}
+    sourceMap: true,
+  },
+
+  pluginOptions: {
+    apollo: {
+      lintGQL: true,
+    },
+  },
+};

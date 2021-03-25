@@ -39,10 +39,10 @@
             <a class="nav-link" href="#">Account</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link cart-button" href="#">
+            <a class="nav-link cart-button" href="#" @click.prevent="openCart">
               <span class="material-icons">shopping_cart</span>
               <span class="cart-counter">
-                0
+                {{ $store.state.cartItems.length }}
               </span>
             </a>
           </li>
@@ -52,6 +52,15 @@
   </nav>
 </template>
 
+<script>
+import CartMixin from '@/mixins/CartMixin';
+
+export default {
+  name: 'Navigation',
+  mixins: [CartMixin],
+};
+</script>
+
 <style scoped lang="scss">
 #navbarNav {
   margin-left: 30px;
@@ -60,6 +69,13 @@
     .nav-item {
       margin-left: 15px;
       margin-right: 15px;
+
+      a {
+        color: var(--body-color);
+        &:hover {
+          color: var(--primary);
+        }
+      }
     }
   }
 }
@@ -74,9 +90,10 @@
   .cart-counter {
     position: absolute;
     top: 0;
-    right: 0;
+    right: -2px;
     color: var(--black);
     font-weight: 300;
+    font-size: 0.85rem;
   }
 }
 </style>

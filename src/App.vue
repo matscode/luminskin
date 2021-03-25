@@ -1,73 +1,43 @@
 <template>
   <div id="app">
-    <div class="bg-dark text-center text-light small py-1">
-      <a href="#" class="get-free-trial-link text-light">
+    <div class="text-center trial-notice">
+      <a href="#" class="get-free-trial-link">
         Get Your Free Trial Today
       </a>
     </div>
 
     <Navigation></Navigation>
 
-    <section class="container">
-      <header class="products-banner">
-        <section class="d-flex align-items-end">
-          <section class="left-content">
-            <h1 class="mb-4">
-              All Products
-            </h1>
-            <p class="mb-0">
-              A 360° look at Lumin
-            </p>
-          </section>
-          <section class="right-content ml-auto">
-            <section id="filterDropdown">
-              <select name="filter" class="border p-3 bg-white">
-                <option value="" disabled="disabled">Filter By</option>
-                <option value="all-products">All Products</option>
-                <option value="new-products">New Products</option>
-                <option value="sets">Sets</option>
-                <option value="skin-care">Skin Care</option>
-                <option value="hari-body-care">Hair & Body Care</option>
-              </select>
-            </section>
-          </section>
-        </section>
-      </header>
-    </section>
+    <Cart v-if="$store.getters.showCart"></Cart>
 
-    <main class="products-listing">
-      <section class="container">
-        <ApolloQuery
-              :query="require('./graphql/GetProducts.gql')"
-              :variables="{ currency: USD }"
-            >
-              <template slot-scope="{ result: { loading, error, data } }">
-                <!-- Loading -->
-                <div v-if="loading" class="loading apollo">Loading...</div>
-
-                <!-- Error -->
-                <div v-else-if="error" class="error apollo">An error occured</div>
-
-                <!-- Result -->
-                <div v-else-if="data" class="result apollo">{{ data.products }}</div>
-
-                <!-- No result -->
-                <div v-else class="no-result apollo">No result :(</div>
-              </template>
-        </ApolloQuery>
-      </section>
-    </main>
-
-    <!-- <router-view /> -->
+    <router-view />
   </div>
 </template>
 
 <script>
 import Navigation from '@/components/Navigation.vue';
+import Cart from '@/components/Cart.vue';
+import { mapState } from 'vuex';
 
 export default {
   name: 'LuminApp',
-  components: { Navigation },
+  components: { Navigation, Cart },
+  watch: {
+    showCart(newValue) {
+      const documentBody = document.querySelector('body');
+
+      if (newValue === true) {
+        // disable <body> scroll ability
+        documentBody.style.overflow = 'hidden';
+      } else {
+        // enable <body> scroll ability
+        documentBody.style.overflow = 'auto';
+      }
+    },
+  },
+  computed: mapState([
+    'showCart',
+  ]),
 };
 </script>
 
@@ -77,13 +47,18 @@ export default {
   --primary-saturated: #2B2E2B;
   --black: #000000;
   --secondary: #E2E6E3;
+  --white: #ffffff;
+  --button-color: #4B5548;
+  --body-color: #0B0C0D;
+  --card-background-color: #f2f2ef;
 }
 
 #app {
   font-family: Inter, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  /* color: #2c3e50; */
+  color: var(--body-color);
 }
 
 h1, h2, h3, h4 {
@@ -94,7 +69,19 @@ h1, h2, h3, h4 {
   color: #000;
 }
 
+.trial-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  background-color: var(--primary-saturated);
+}
+
 .get-free-trial-link {
+  font-size: 0.7rem;
+  color: var(--secondary);
+  margin: 0;
+
   &:hover {
     text-decoration: none;
     color: var(--primary);
@@ -108,37 +95,89 @@ h1, h2, h3, h4 {
   }
 }
 
-#filterDropdown {
-  position: relative;
-    width: 300px;
-
-  select {
-    width: 100%;
-    font-size: .9rem;
-    color: var(--primary);
-    border-color: var(--primary);
-    appearance: none;
-
+.products-listing {
+  padding: {
+    top: 30px;
+    bottom: 30px;
   }
+  background-color: var(--secondary);
 
-  &::after {
-    display: inline-block;
-    position: absolute;
-    top: 3px;
-    right: 10px;
-    width: 24px;
-    height: 24px;
-    transform: translateY(50%);
-    content: '';
-    background-image: url('assets/expand_more_black_24dp.svg');
+  .product {
+    text-align: center;
+    margin: {
+      top: 50px;
+      bottom: 50px;
+    }
+
+    .product-image-wrapper {
+      width: 130px;
+      height: 130px;
+      padding: 30px;
+      margin-bottom: 30px;
+
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    h5.product-title {
+      font-size: 0.9em;
+      color: var(--primary);
+    }
+
+    p.product-price {
+      font-size: 1.1rem;
+    }
   }
 }
 
-.products-listing {
+button.add-to-cart-btn,
+button.cart-cta-btns {
+  border-radius: 0;
+  font-size: 0.8rem;
   padding: {
-    top: 70px;
-    bottom: 70px;
+    top: 12px;
+    bottom: 12px;
   }
-  background-color: var(--secondary);
+}
+
+button.add-to-cart-btn, button.checkout-page-btn {
+  background-color: var(--button-color);
+  color: var(--white);
+
+  &:hover {
+    background-color: var(--primary-saturated);
+    color: var(--white);
+  }
+}
+
+button.add-to-cart-btn {
+  width: 70%;
+}
+
+button.checkout-page-btn,
+button.subscription-btn {
+  display: block;
+  width: 100%;
+
+  margin: {
+    top: 20px;
+    bottom: 20px;
+  }
+
+  text-transform: uppercase;
+  font-size: 0.7rem;
+  letter-spacing: 2px;
+}
+
+button.subscription-btn {
+  background-color: var(--white);
+  color: var(--primary-saturated);
+  border-color: var(--primary-saturated);
 }
 </style>
