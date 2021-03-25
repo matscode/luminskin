@@ -80,7 +80,9 @@
                 </div>
 
                 <div class="right-half position-relative">
-                  <img :src="cartItem.product.image_url" alt="Image" width="50">
+                  <img :src="cartItem.product.image_url"
+                  alt="Image"
+                  class="cart-product-image">
 
                   <a
                   class="cart-item-remove-button"
@@ -287,6 +289,11 @@ export default {
       margin-left: 20px;
     }
   }
+}
+
+.cart-product-image {
+  max-width: 50px;
+  max-height: 60px;
 }
 
 .cart-item-remove-button {
