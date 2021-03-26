@@ -1,5 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import gql from 'graphql-tag';
+import { apolloClientFactory } from '../vue-apollo';
+
+const { apolloClient } = apolloClientFactory({});
 
 Vue.use(Vuex);
 
@@ -61,14 +65,34 @@ export default new Vuex.Store({
     },
   },
 
-  actions: {},
+  actions: {
+    getProducts({ commit }, currency = 'USD') {
+      apolloClient.query({
+        query: gql`
+          query GetProdutcs($currency: Currency! = USD) {
+            products {
+              id
+              title
+              image_url
+              price(currency: $currency)
+            }
+          }
+        `,
+        variables: {
+          currency,
+        },
+        fetchPolicy: 'no-cache',
+      }).then((r) => {
+        commit('UPDATE_PRODUCTS', r.data.products);
+        commit('REFRESH_CART');
+        commit('CHANGE_CURRENCY', currency);
+      });
+    },
+  },
 
   getters: {
     showCart(state) {
       return state.showCart;
     },
   },
-
-  // modules: {
-  // },
 });

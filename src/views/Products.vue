@@ -56,44 +56,17 @@
 </template>
 
 <script>
-import gql from 'graphql-tag';
 import Dropdown from '@/components/Dropdown.vue';
 import CartMixin from '@/mixins/CartMixin';
+import { mapState } from 'vuex';
 
 export default {
   name: 'Products',
   mixins: [CartMixin],
   components: { Dropdown },
-  data() {
-    return {
-      products: [],
-    };
-  },
-  apollo: {
-    products: {
-      query: gql`query GetProdutcs($currency: Currency! = USD) {
-          products {
-            id
-            title
-            image_url
-            price(currency: $currency)
-          }
-        }`,
-      variables() {
-        return {
-          currency: this.$store.state.currency,
-        };
-      },
-    },
-  },
-  watch: {
-    products: {
-      deep: true,
-      handler(products) {
-        this.$store.commit('UPDATE_PRODUCTS', products);
-        this.$store.commit('REFRESH_CART');
-      },
-    },
+  computed: mapState(['products']),
+  mounted() {
+    this.$store.dispatch('getProducts');
   },
 };
 </script>

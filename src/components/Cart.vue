@@ -177,8 +177,7 @@ export default {
     },
 
     handleCurrencyChange(selectEvent) {
-      console.log(selectEvent.target.value);
-      this.$store.commit('CHANGE_CURRENCY', selectEvent.target.value);
+      this.$store.dispatch('getProducts', selectEvent.target.value);
     },
   },
 };
